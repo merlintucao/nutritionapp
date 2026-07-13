@@ -50,11 +50,12 @@ function encodePNG(size, pixels) {
   ]);
 }
 
-// Simple design: rounded dark tile with a green rounded "capsule" + fork lines.
+// Modernist design: light tile, bold red square "plate" ring split by a bar.
+// Sharp geometry (Chebyshev/square distance), 0px radius — matches the theme.
 function drawIcon(size) {
   const px = Buffer.alloc(size * size * 4);
-  const bg = [15, 17, 21];        // #0f1115
-  const accent = [79, 209, 165];  // #4fd1a5
+  const bg = [243, 242, 242];   // #f3f2f2
+  const accent = [236, 48, 19]; // #ec3013
 
   const set = (x, y, c, a = 255) => {
     if (x < 0 || y < 0 || x >= size || y >= size) return;
@@ -65,23 +66,23 @@ function drawIcon(size) {
   // Background fill.
   for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) set(x, y, bg);
 
-  const cx = size / 2, cy = size / 2;
-  const rOuter = size * 0.30;
-  const rInner = size * 0.20;
+  const cx = (size - 1) / 2, cy = (size - 1) / 2;
+  const outer = size * 0.30;
+  const inner = size * 0.185;
 
-  // Draw an accent ring (represents a plate).
+  // A square accent ring (a plate, rendered sharp for the Modernist look).
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      const d = Math.hypot(x - cx, y - cy);
-      if (d <= rOuter && d >= rInner) set(x, y, accent);
+      const cheb = Math.max(Math.abs(x - cx), Math.abs(y - cy));
+      if (cheb <= outer && cheb >= inner) set(x, y, accent);
     }
   }
 
-  // A vertical accent bar (fork/utensil hint) crossing the ring.
-  const barW = Math.max(2, Math.round(size * 0.035));
-  for (let y = Math.round(cy - rOuter * 1.15); y < Math.round(cy + rOuter * 1.15); y++) {
-    for (let x = Math.round(cx - barW / 2); x < Math.round(cx + barW / 2); x++) {
-      set(x, y, bg); // notch through the ring for a clean split look
+  // A vertical bar notching through the ring for a clean split.
+  const barW = Math.max(2, Math.round(size * 0.04));
+  for (let y = Math.round(cy - outer * 1.2); y <= Math.round(cy + outer * 1.2); y++) {
+    for (let x = Math.round(cx - barW / 2); x <= Math.round(cx + barW / 2); x++) {
+      set(x, y, bg);
     }
   }
 

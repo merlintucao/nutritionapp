@@ -4,6 +4,9 @@ A lightweight mobile web app for logging food and tracking **calories, protein, 
 Built as static files (no build step, no backend) so it can be added to the iPhone Home
 Screen from Safari and used like a native app.
 
+The UI uses the **Modernist** theme imported from Claude Design (sharp corners, Archivo
+type, bold red accent, strong dividers).
+
 ## Features (V1)
 
 - **Running totals** for calories, protein, and fat for the current day.
@@ -64,7 +67,7 @@ Once deployed, open the Vercel URL in Safari on your iPhone and
 | File | Purpose |
 |------|---------|
 | `index.html` | App shell and markup |
-| `style.css` | Mobile-first dark UI |
+| `style.css` | Modernist theme UI (from Claude Design) |
 | `app.js` | All app logic (log, totals, search, quick-add, persistence) |
 | `data.js` | The common-food database (`FOOD_DB`, `CATEGORIES`) |
 | `manifest.json` | Web app manifest for installability |

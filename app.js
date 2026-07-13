@@ -29,7 +29,11 @@ const el = {
   logHeader: document.getElementById('logHeader'),
   emptyLogMsg: document.getElementById('emptyLogMsg'),
   clearDayBtn: document.getElementById('clearDayBtn'),
+  dateLabel: document.getElementById('dateLabel'),
 };
+
+// Inline SVG for the per-item remove ("×") button, matching the design.
+const REMOVE_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
 
 // ---- Helpers ----
 function todayStr() {
@@ -87,8 +91,8 @@ function renderTotals() {
   }, { calories: 0, protein: 0, fat: 0 });
 
   el.totalCalories.textContent = round(t.calories);
-  el.totalProtein.textContent = round(t.protein);
-  el.totalFat.textContent = round(t.fat);
+  el.totalProtein.textContent = round(t.protein, 1);
+  el.totalFat.textContent = round(t.fat, 1);
 }
 
 function renderLog() {
@@ -98,8 +102,8 @@ function renderLog() {
   el.logHeader.classList.toggle('hidden', empty);
 
   logState.items.forEach((it) => {
-    const li = document.createElement('li');
-    li.className = 'log-item';
+    const row = document.createElement('div');
+    row.className = 'log-item';
 
     const info = document.createElement('div');
     info.className = 'log-item-info';
@@ -123,15 +127,15 @@ function renderLog() {
     const rm = document.createElement('button');
     rm.className = 'remove-btn';
     rm.setAttribute('aria-label', 'Remove ' + it.name);
-    rm.innerHTML = '&times;';
+    rm.innerHTML = REMOVE_SVG;
     rm.addEventListener('click', () => removeItem(it.uid));
 
-    li.appendChild(info);
-    li.appendChild(cal);
-    li.appendChild(pro);
-    li.appendChild(fat);
-    li.appendChild(rm);
-    el.logList.appendChild(li);
+    row.appendChild(info);
+    row.appendChild(cal);
+    row.appendChild(pro);
+    row.appendChild(fat);
+    row.appendChild(rm);
+    el.logList.appendChild(row);
   });
 }
 
@@ -164,7 +168,8 @@ function renderQuickAdd() {
   quick.forEach((food) => {
     const chip = document.createElement('button');
     chip.className = 'chip';
-    chip.innerHTML = `${escapeHtml(food.name)}<span class="chip-sub">${round(food.calories)} kcal</span>`;
+    chip.innerHTML = `<div class="chip-name">${escapeHtml(food.name)}</div>
+      <div class="chip-sub">${round(food.calories)} kcal</div>`;
     chip.addEventListener('click', () => {
       addFood(food, 1);
       flashChip(chip);
@@ -174,9 +179,8 @@ function renderQuickAdd() {
 }
 
 function flashChip(chip) {
-  chip.style.background = 'var(--accent)';
-  chip.style.color = '#08120d';
-  setTimeout(() => { chip.style.background = ''; chip.style.color = ''; }, 220);
+  chip.style.background = 'var(--color-accent-100)';
+  setTimeout(() => { chip.style.background = ''; }, 220);
 }
 
 // ---- Category / food pickers ----
@@ -290,23 +294,24 @@ function runSearch(q) {
   el.searchResults.innerHTML = '';
   if (matches.length === 0) {
     const div = document.createElement('div');
-    div.className = 'result-item';
-    div.innerHTML = `<span class="result-name">No matches</span>`;
+    div.className = 'result-empty';
+    div.textContent = 'No matches';
     el.searchResults.appendChild(div);
   } else {
     matches.forEach((food) => {
-      const div = document.createElement('div');
-      div.className = 'result-item';
-      div.innerHTML = `<span class="result-name">${escapeHtml(food.name)}</span>
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'result-item';
+      btn.innerHTML = `<span class="result-name">${escapeHtml(food.name)}</span>
         <span class="result-meta">${round(food.calories)} kcal · ${food.protein}p · ${food.fat}f</span>`;
-      div.addEventListener('click', () => {
+      btn.addEventListener('click', () => {
         addFood(food, 1);
         el.searchInput.value = '';
         el.searchResults.classList.add('hidden');
         el.searchResults.innerHTML = '';
         el.searchInput.blur();
       });
-      el.searchResults.appendChild(div);
+      el.searchResults.appendChild(btn);
     });
   }
   el.searchResults.classList.remove('hidden');
@@ -359,10 +364,19 @@ el.clearDayBtn.addEventListener('click', clearDay);
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && logState.date !== todayStr()) {
     logState = loadLog();
+    renderDateLabel();
     renderAll();
   }
 });
 
+// Header date, e.g. "SUN, 13 JUL".
+function renderDateLabel() {
+  el.dateLabel.textContent = new Date()
+    .toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })
+    .toUpperCase();
+}
+
 // ---- Boot ----
+renderDateLabel();
 initCategories();
 renderAll();

@@ -7,86 +7,104 @@
 
 <!-- iOS "Add to Home Screen" support -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Nutrition">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0f1115">
+<meta name="theme-color" content="#f3f2f2">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" href="icons/icon-180.png">
 <link rel="manifest" href="manifest.json">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="app">
 
   <header class="topbar">
-    <h1>Nutrition</h1>
-    <button id="clearDayBtn" class="icon-btn" title="Clear today's log" aria-label="Clear today's log">&#128465;</button>
+    <div class="topbar-head">
+      <div>
+        <h1>NUTRITION</h1>
+        <div class="date" id="dateLabel"></div>
+      </div>
+      <button id="clearDayBtn" class="icon-btn" title="Clear today's log" aria-label="Clear today's log">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+      </button>
+    </div>
+    <hr class="topbar-rule">
   </header>
 
-  <section class="totals">
-    <div class="total-card">
-      <span class="total-value" id="totalCalories">0</span>
-      <span class="total-label">kcal</span>
-    </div>
-    <div class="total-card">
-      <span class="total-value" id="totalProtein">0</span>
-      <span class="total-label">protein (g)</span>
-    </div>
-    <div class="total-card">
-      <span class="total-value" id="totalFat">0</span>
-      <span class="total-label">fat (g)</span>
-    </div>
-  </section>
+  <main class="content">
 
-  <section class="quick-add">
-    <h2>Quick Add</h2>
-    <div id="quickAddList" class="chip-row"></div>
-  </section>
+    <section class="totals">
+      <div class="total total-cal">
+        <div class="total-value" id="totalCalories">0</div>
+        <div class="total-label">kcal</div>
+      </div>
+      <div class="total">
+        <div class="total-value" id="totalProtein">0</div>
+        <div class="total-label">protein g</div>
+      </div>
+      <div class="total">
+        <div class="total-value" id="totalFat">0</div>
+        <div class="total-label">fat g</div>
+      </div>
+    </section>
 
-  <section class="search-section">
-    <input type="search" id="searchInput" placeholder="Search foods..." autocomplete="off" autocapitalize="none">
-    <div id="searchResults" class="search-results hidden"></div>
-  </section>
+    <section class="section">
+      <h2>Quick Add</h2>
+      <div id="quickAddList" class="chip-row"></div>
+    </section>
 
-  <section class="picker-section">
-    <h2>Browse by Category</h2>
-    <div class="picker-row">
-      <select id="categorySelect">
-        <option value="">Category…</option>
-      </select>
-      <select id="foodSelect" disabled>
-        <option value="">Food…</option>
-      </select>
-    </div>
+    <section class="section">
+      <h2>Search</h2>
+      <div class="search-wrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+        <input type="search" id="searchInput" placeholder="Search foods…" autocomplete="off" autocapitalize="none">
+      </div>
+      <div id="searchResults" class="search-results hidden"></div>
+    </section>
 
-    <div id="addForm" class="add-form hidden">
-      <div class="add-form-info">
+    <section class="section">
+      <h2>Browse by Category</h2>
+      <div class="picker-row">
+        <select id="categorySelect">
+          <option value="">Category…</option>
+        </select>
+        <select id="foodSelect" disabled>
+          <option value="">Food…</option>
+        </select>
+      </div>
+
+      <div id="addForm" class="add-form hidden">
         <div class="add-form-name" id="selectedFoodName"></div>
         <div class="add-form-macros" id="selectedFoodMacros"></div>
+        <div class="add-form-controls">
+          <input type="number" id="quantityInput" min="0" step="any">
+          <span id="quantityUnit" class="unit-label"></span>
+          <button id="addFoodBtn" class="primary-btn">Add</button>
+        </div>
       </div>
-      <div class="add-form-controls">
-        <input type="number" id="quantityInput" min="0" step="any">
-        <span id="quantityUnit" class="unit-label"></span>
-        <button id="addFoodBtn" class="primary-btn">Add</button>
+    </section>
+
+    <section class="section">
+      <h2>Today's Log</h2>
+      <div id="logHeader" class="log-header hidden">
+        <span class="lh-name">Food</span>
+        <span>kcal</span>
+        <span>prot</span>
+        <span>fat</span>
+        <span></span>
       </div>
-    </div>
-  </section>
+      <div id="logList" class="log-list"></div>
+      <div id="emptyLogMsg" class="empty-msg">Nothing logged yet today.</div>
+    </section>
 
-  <section class="log-section">
-    <h2>Today's Log</h2>
-    <div id="logHeader" class="log-header hidden">
-      <span class="lh-name">Food</span>
-      <span>kcal</span>
-      <span>Prot</span>
-      <span>Fat</span>
-      <span></span>
-    </div>
-    <ul id="logList" class="log-list"></ul>
-    <p id="emptyLogMsg" class="empty-msg">Nothing logged yet today.</p>
-  </section>
-
+  </main>
 </div>
 
 <script src="data.js"></script>
