@@ -35,6 +35,30 @@ python3 -m http.server 8000
 
 Or drop the folder on GitHub Pages / Netlify / any static host.
 
+## Deploying to Vercel
+
+This is a static site with no build step. `vercel.json` sets sensible cache
+headers (icons cached long; HTML/JS/CSS revalidate so updates appear
+immediately), and `.vercelignore` keeps dev-only files out of the deploy.
+
+**Option A — Git integration (recommended):**
+
+1. Go to [vercel.com/new](https://vercel.com/new) and import the
+   `merlintucao/nutritionapp` repo.
+2. Framework Preset: **Other**. Leave build command and output directory empty.
+3. Deploy. Vercel serves the files as-is and auto-redeploys on every push.
+
+**Option B — Vercel CLI:**
+
+```sh
+npm i -g vercel
+vercel        # preview deploy
+vercel --prod # production deploy
+```
+
+Once deployed, open the Vercel URL in Safari on your iPhone and
+**Share → Add to Home Screen**.
+
 ## Project layout
 
 | File | Purpose |
