@@ -29,7 +29,6 @@ const el = {
   logHeader: document.getElementById('logHeader'),
   emptyLogMsg: document.getElementById('emptyLogMsg'),
   clearDayBtn: document.getElementById('clearDayBtn'),
-  dateLabel: document.getElementById('dateLabel'),
 };
 
 // Inline SVG for the per-item remove ("×") button, matching the design.
@@ -364,19 +363,10 @@ el.clearDayBtn.addEventListener('click', clearDay);
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden && logState.date !== todayStr()) {
     logState = loadLog();
-    renderDateLabel();
     renderAll();
   }
 });
 
-// Header date, e.g. "SUN, 13 JUL".
-function renderDateLabel() {
-  el.dateLabel.textContent = new Date()
-    .toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })
-    .toUpperCase();
-}
-
 // ---- Boot ----
-renderDateLabel();
 initCategories();
 renderAll();

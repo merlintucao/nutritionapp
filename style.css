@@ -68,13 +68,6 @@ html, body {
   letter-spacing: -0.02em;
   margin: 0;
 }
-.topbar .date {
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-neutral-600);
-  margin-top: 6px;
-}
 .topbar-rule {
   height: 2px;
   border: 0;

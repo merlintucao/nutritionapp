@@ -1,6 +1,6 @@
 {
-  "name": "Nutrition Tracker",
-  "short_name": "Nutrition",
+  "name": "homnaytuian",
+  "short_name": "homnaytuian",
   "description": "Quickly log food and track calories, protein, and fat.",
   "start_url": "index.html",
   "display": "standalone",
