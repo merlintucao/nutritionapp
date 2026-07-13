@@ -205,38 +205,66 @@ select:disabled { color: var(--text-dim); }
   margin: 0;
   padding: 0;
 }
-.log-item {
-  display: flex;
-  justify-content: space-between;
+
+/* Shared column template so the header and every row align exactly. */
+.log-section { --log-cols: minmax(0, 1fr) 3.6rem 3rem 3rem 1.6rem; }
+
+.log-header {
+  display: grid;
+  grid-template-columns: var(--log-cols);
   align-items: center;
+  gap: 6px;
+  padding: 0 12px 6px;
+  border: 1px solid transparent; /* matches row content box for exact alignment */
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+}
+.log-header.hidden { display: none; }
+.log-header span { text-align: right; white-space: nowrap; }
+.log-header .lh-name { text-align: left; }
+
+.log-item {
+  display: grid;
+  grid-template-columns: var(--log-cols);
+  align-items: center;
+  gap: 6px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px 12px;
   margin-bottom: 8px;
-  gap: 10px;
 }
 .log-item-info { min-width: 0; }
-.log-item-name { font-size: 0.92rem; font-weight: 500; }
-.log-item-qty { font-size: 0.78rem; color: var(--text-dim); }
-.log-item-macros {
-  font-size: 0.78rem;
-  color: var(--text-dim);
+.log-item-name {
+  font-size: 0.92rem;
+  font-weight: 500;
   white-space: nowrap;
-  display: flex;
-  gap: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.log-item-macros .m-cal { color: var(--text); font-weight: 600; }
-.log-item-macros .m-protein { color: var(--protein); }
-.log-item-macros .m-fat { color: var(--fat); }
+.log-item-qty { font-size: 0.78rem; color: var(--text-dim); }
+
+.log-item .m-cal,
+.log-item .m-protein,
+.log-item .m-fat {
+  text-align: right;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.log-item .m-cal { color: var(--text); font-weight: 700; }
+.log-item .m-protein { color: var(--protein); }
+.log-item .m-fat { color: var(--fat); }
 
 .remove-btn {
   background: none;
   border: none;
   color: var(--danger);
   font-size: 1.1rem;
-  padding: 4px 6px;
-  flex: 0 0 auto;
+  padding: 4px 0;
+  justify-self: end;
 }
 
 .empty-msg {

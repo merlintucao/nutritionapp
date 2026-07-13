@@ -26,6 +26,7 @@ const el = {
   quantityUnit: document.getElementById('quantityUnit'),
   addFoodBtn: document.getElementById('addFoodBtn'),
   logList: document.getElementById('logList'),
+  logHeader: document.getElementById('logHeader'),
   emptyLogMsg: document.getElementById('emptyLogMsg'),
   clearDayBtn: document.getElementById('clearDayBtn'),
 };
@@ -92,11 +93,9 @@ function renderTotals() {
 
 function renderLog() {
   el.logList.innerHTML = '';
-  if (logState.items.length === 0) {
-    el.emptyLogMsg.classList.remove('hidden');
-  } else {
-    el.emptyLogMsg.classList.add('hidden');
-  }
+  const empty = logState.items.length === 0;
+  el.emptyLogMsg.classList.toggle('hidden', !empty);
+  el.logHeader.classList.toggle('hidden', empty);
 
   logState.items.forEach((it) => {
     const li = document.createElement('li');
@@ -108,11 +107,18 @@ function renderLog() {
     info.innerHTML = `<div class="log-item-name">${escapeHtml(it.name)}</div>
       <div class="log-item-qty">${qtyText}</div>`;
 
-    const macros = document.createElement('div');
-    macros.className = 'log-item-macros';
-    macros.innerHTML = `<span class="m-cal">${round(it.calories)}</span>
-      <span class="m-protein">${round(it.protein, 1)}p</span>
-      <span class="m-fat">${round(it.fat, 1)}f</span>`;
+    // Macros as direct grid children so they align into fixed columns.
+    const cal = document.createElement('span');
+    cal.className = 'm-cal';
+    cal.textContent = round(it.calories);
+
+    const pro = document.createElement('span');
+    pro.className = 'm-protein';
+    pro.textContent = round(it.protein, 1);
+
+    const fat = document.createElement('span');
+    fat.className = 'm-fat';
+    fat.textContent = round(it.fat, 1);
 
     const rm = document.createElement('button');
     rm.className = 'remove-btn';
@@ -121,7 +127,9 @@ function renderLog() {
     rm.addEventListener('click', () => removeItem(it.uid));
 
     li.appendChild(info);
-    li.appendChild(macros);
+    li.appendChild(cal);
+    li.appendChild(pro);
+    li.appendChild(fat);
     li.appendChild(rm);
     el.logList.appendChild(li);
   });
