@@ -71,8 +71,8 @@ Once deployed, open the Vercel URL in Safari on your iPhone and
 | `app.js` | All app logic (log, totals, search, quick-add, persistence) |
 | `data.js` | The common-food database (`FOOD_DB`, `CATEGORIES`) |
 | `manifest.json` | Web app manifest for installability |
-| `icons/` | App icons (180/192/512) |
-| `scripts/gen-icons.js` | Regenerates the PNG icons from `dog.png` |
+| `icons/` | App icons and PNG favicons |
+| `scripts/gen-icons.js` | Regenerates `favicon.ico` and PNG icons from `dog.png` |
 | `scripts/smoke.js` | Headless end-to-end smoke test (Playwright) |
 
 ## Adding foods

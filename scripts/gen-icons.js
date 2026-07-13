@@ -47,6 +47,32 @@ function encodePNG(width, height, pixels) {
   ]);
 }
 
+function encodeICO(images) {
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0);
+  header.writeUInt16LE(1, 2);
+  header.writeUInt16LE(images.length, 4);
+
+  const entries = [];
+  let offset = header.length + images.length * 16;
+
+  images.forEach((image) => {
+    const entry = Buffer.alloc(16);
+    entry[0] = image.size === 256 ? 0 : image.size;
+    entry[1] = image.size === 256 ? 0 : image.size;
+    entry[2] = 0;
+    entry[3] = 0;
+    entry.writeUInt16LE(1, 4);
+    entry.writeUInt16LE(32, 6);
+    entry.writeUInt32LE(image.png.length, 8);
+    entry.writeUInt32LE(offset, 12);
+    entries.push(entry);
+    offset += image.png.length;
+  });
+
+  return Buffer.concat([header, ...entries, ...images.map(image => image.png)]);
+}
+
 function paeth(a, b, c) {
   const p = a + b - c;
   const pa = Math.abs(p - a);
@@ -147,9 +173,21 @@ const image = decodePNG(source);
 
 fs.mkdirSync(outDir, { recursive: true });
 
-[180, 192, 512].forEach((size) => {
+const pngs = new Map();
+
+[16, 32, 180, 192, 512].forEach((size) => {
   const pixels = resizeCenterCrop(image, size);
   const png = encodePNG(size, size, pixels);
-  fs.writeFileSync(path.join(outDir, `icon-${size}.png`), png);
+  pngs.set(size, png);
+  const out = path.join(outDir, `icon-${size}.png`);
+  fs.writeFileSync(out, png);
   console.log(`wrote icons/icon-${size}.png (${png.length} bytes)`);
 });
+
+const favicon = encodeICO([
+  { size: 16, png: pngs.get(16) },
+  { size: 32, png: pngs.get(32) },
+]);
+const faviconPath = path.join(__dirname, '..', 'favicon.ico');
+fs.writeFileSync(faviconPath, favicon);
+console.log(`wrote favicon.ico (${favicon.length} bytes)`);

@@ -1,7 +1,7 @@
 {
   "name": "homnaytuian",
   "short_name": "homnaytuian",
-  "description": "Quickly log food and track calories, protein, and fat.",
+  "description": "homnaytuian",
   "start_url": "index.html",
   "display": "standalone",
   "orientation": "portrait",
