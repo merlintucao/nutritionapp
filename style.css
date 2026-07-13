@@ -306,12 +306,60 @@ html, body {
 }
 .primary-btn:active { background: var(--color-accent-700); }
 
+/* --- Custom (one-time) food --- */
+.custom-toggle {
+  margin-top: 10px;
+  background: none;
+  border: 0;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.custom-toggle:active { color: var(--color-accent-700); }
+
+.custom-form {
+  margin-top: 10px;
+  border: 2px solid var(--color-text);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.custom-form.hidden { display: none; }
+.custom-input {
+  width: 100%;
+  min-height: 42px;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-text);
+  caret-color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-divider);
+  border-radius: 0;
+  font-variant-numeric: tabular-nums;
+}
+.custom-input:focus { outline: none; border-color: var(--color-accent); }
+.custom-macros {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.custom-add {
+  width: 100%;
+  min-height: 44px;
+}
+
 /* --- Today's log --- */
 .log-header,
 .log-item {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 3.2rem 2.6rem 2.6rem 1.6rem;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) 2.9rem 3rem 2.4rem 2.4rem 1.4rem;
+  gap: 6px;
   align-items: center;
 }
 .log-header {
@@ -358,6 +406,25 @@ html, body {
 }
 .log-item .m-protein,
 .log-item .m-fat { color: var(--color-neutral-700); }
+
+.qty-select {
+  width: 100%;
+  min-width: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid var(--color-divider);
+  border-radius: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  text-align-last: center;
+  padding: 3px 2px;
+  cursor: pointer;
+}
+.qty-select:focus { outline: none; border-color: var(--color-accent); }
 
 .remove-btn {
   justify-self: end;

@@ -88,12 +88,24 @@
           <button id="addFoodBtn" class="primary-btn">Add</button>
         </div>
       </div>
+
+      <button id="customToggleBtn" type="button" class="custom-toggle">+ Add custom food</button>
+      <div id="customForm" class="custom-form hidden">
+        <input type="text" id="customName" class="custom-input" placeholder="Food name" autocomplete="off">
+        <div class="custom-macros">
+          <input type="number" id="customCal" class="custom-input" placeholder="kcal" min="0" step="any" inputmode="decimal">
+          <input type="number" id="customProtein" class="custom-input" placeholder="protein g" min="0" step="any" inputmode="decimal">
+          <input type="number" id="customFat" class="custom-input" placeholder="fat g" min="0" step="any" inputmode="decimal">
+        </div>
+        <button id="customAddBtn" type="button" class="primary-btn custom-add">Add to today</button>
+      </div>
     </section>
 
     <section class="section">
       <h2>Today's Log</h2>
       <div id="logHeader" class="log-header hidden">
         <span class="lh-name">Food</span>
+        <span>qty</span>
         <span>kcal</span>
         <span>prot</span>
         <span>fat</span>

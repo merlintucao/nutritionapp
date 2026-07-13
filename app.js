@@ -29,6 +29,13 @@ const el = {
   logHeader: document.getElementById('logHeader'),
   emptyLogMsg: document.getElementById('emptyLogMsg'),
   clearDayBtn: document.getElementById('clearDayBtn'),
+  customToggleBtn: document.getElementById('customToggleBtn'),
+  customForm: document.getElementById('customForm'),
+  customName: document.getElementById('customName'),
+  customCal: document.getElementById('customCal'),
+  customProtein: document.getElementById('customProtein'),
+  customFat: document.getElementById('customFat'),
+  customAddBtn: document.getElementById('customAddBtn'),
 };
 
 // Inline SVG for the per-item remove ("×") button, matching the design.
@@ -83,9 +90,10 @@ function scaled(food, servings) {
 // ---- Rendering ----
 function renderTotals() {
   const t = logState.items.reduce((acc, it) => {
-    acc.calories += it.calories;
-    acc.protein += it.protein;
-    acc.fat += it.fat;
+    const q = it.quantity || 1;
+    acc.calories += it.calories * q;
+    acc.protein += it.protein * q;
+    acc.fat += it.fat * q;
     return acc;
   }, { calories: 0, protein: 0, fat: 0 });
 
@@ -101,27 +109,41 @@ function renderLog() {
   el.logHeader.classList.toggle('hidden', empty);
 
   logState.items.forEach((it) => {
+    const q = it.quantity || 1;
     const row = document.createElement('div');
     row.className = 'log-item';
 
     const info = document.createElement('div');
     info.className = 'log-item-info';
-    const qtyText = formatQty(it.servings, it.servingSize, it.servingUnit);
+    const qtyText = formatQty(it.servings * q, it.servingSize, it.servingUnit);
     info.innerHTML = `<div class="log-item-name">${escapeHtml(it.name)}</div>
       <div class="log-item-qty">${qtyText}</div>`;
+
+    // Quantity dropdown (1–10) sits between the food name and kcal.
+    const qtySel = document.createElement('select');
+    qtySel.className = 'qty-select';
+    qtySel.setAttribute('aria-label', 'Quantity for ' + it.name);
+    for (let n = 1; n <= 10; n++) {
+      const opt = document.createElement('option');
+      opt.value = String(n);
+      opt.textContent = String(n);
+      if (n === q) opt.selected = true;
+      qtySel.appendChild(opt);
+    }
+    qtySel.addEventListener('change', (e) => setQuantity(it.uid, parseInt(e.target.value, 10)));
 
     // Macros as direct grid children so they align into fixed columns.
     const cal = document.createElement('span');
     cal.className = 'm-cal';
-    cal.textContent = round(it.calories);
+    cal.textContent = round(it.calories * q);
 
     const pro = document.createElement('span');
     pro.className = 'm-protein';
-    pro.textContent = round(it.protein, 1);
+    pro.textContent = round(it.protein * q, 1);
 
     const fat = document.createElement('span');
     fat.className = 'm-fat';
-    fat.textContent = round(it.fat, 1);
+    fat.textContent = round(it.fat * q, 1);
 
     const rm = document.createElement('button');
     rm.className = 'remove-btn';
@@ -130,6 +152,7 @@ function renderLog() {
     rm.addEventListener('click', () => removeItem(it.uid));
 
     row.appendChild(info);
+    row.appendChild(qtySel);
     row.appendChild(cal);
     row.appendChild(pro);
     row.appendChild(fat);
@@ -253,6 +276,7 @@ function addFood(food, servings) {
     calories: m.calories,
     protein: m.protein,
     fat: m.fat,
+    quantity: 1,
   });
   saveLog();
 
@@ -260,6 +284,37 @@ function addFood(food, servings) {
   saveJSON(LS_FREQ, freq);
 
   renderAll();
+}
+
+// One-time custom food: logged to today only, never added to the food DB or
+// quick-add (freq is untouched).
+function addCustomFood(name, calories, protein, fat) {
+  logState.items.push({
+    uid: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+    foodId: null,
+    name: name,
+    servings: 1,
+    servingSize: 1,
+    servingUnit: 'serving',
+    calories: calories,
+    protein: protein,
+    fat: fat,
+    quantity: 1,
+    custom: true,
+  });
+  saveLog();
+  renderTotals();
+  renderLog();
+}
+
+// Change a logged item's quantity multiplier (1–10).
+function setQuantity(uid, q) {
+  const it = logState.items.find(x => x.uid === uid);
+  if (!it) return;
+  it.quantity = q;
+  saveLog();
+  renderTotals();
+  renderLog();
 }
 
 function removeItem(uid) {
@@ -279,15 +334,25 @@ function clearDay() {
 }
 
 // ---- Search ----
+// Lowercase + strip Vietnamese diacritics so "chuối", "chuoi" and "Chuoi" all
+// match, and English display names still match plain English queries.
+function normalizeText(s) {
+  return String(s)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/đ/g, 'd'); // đ (not decomposed by NFD)
+}
+
 function runSearch(q) {
-  const query = q.trim().toLowerCase();
+  const query = normalizeText(q.trim());
   if (!query) {
     el.searchResults.classList.add('hidden');
     el.searchResults.innerHTML = '';
     return;
   }
   const matches = FOOD_DB
-    .filter(f => f.name.toLowerCase().includes(query) || f.category.toLowerCase().includes(query))
+    .filter(f => normalizeText(f.name + ' ' + f.category + ' ' + (f.vi || '')).includes(query))
     .slice(0, 12);
 
   el.searchResults.innerHTML = '';
@@ -358,6 +423,33 @@ document.addEventListener('click', (e) => {
 });
 
 el.clearDayBtn.addEventListener('click', clearDay);
+
+// Custom one-time food.
+el.customToggleBtn.addEventListener('click', () => {
+  el.customForm.classList.toggle('hidden');
+  if (!el.customForm.classList.contains('hidden')) el.customName.focus();
+});
+el.customAddBtn.addEventListener('click', submitCustomFood);
+[el.customName, el.customCal, el.customProtein, el.customFat].forEach((input) => {
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitCustomFood(); });
+});
+
+function submitCustomFood() {
+  const name = el.customName.value.trim();
+  const cal = parseFloat(el.customCal.value);
+  const protein = parseFloat(el.customProtein.value) || 0;
+  const fat = parseFloat(el.customFat.value) || 0;
+  if (!name) { el.customName.focus(); return; }
+  if (!isFinite(cal) || cal < 0) { el.customCal.focus(); return; }
+
+  addCustomFood(name, cal, protein, fat);
+
+  el.customName.value = '';
+  el.customCal.value = '';
+  el.customProtein.value = '';
+  el.customFat.value = '';
+  el.customForm.classList.add('hidden');
+}
 
 // If the app is reopened on a new day, roll over to a fresh log.
 document.addEventListener('visibilitychange', () => {
