@@ -86,6 +86,7 @@ const FOOD_DB = [
 
   // --- Beverages ---
   { id: 'orange_juice', name: 'Orange Juice', category: 'Beverages', servingSize: 240, servingUnit: 'ml (1 cup)', calories: 110, protein: 1.7, fat: 0.5, vi: 'nước cam' },
+  { id: 'coconut_water', name: 'Coconut Water', category: 'Beverages', servingSize: 700, servingUnit: 'ml (bottle)', calories: 134, protein: 5, fat: 1.4, common: true, vi: 'nước dừa' },
   { id: 'protein_shake', name: 'Whey Protein Shake', category: 'Beverages', servingSize: 1, servingUnit: 'scoop', calories: 120, protein: 24, fat: 1.5, common: true, vi: 'sữa protein whey' },
   { id: 'black_coffee', name: 'Coffee, black', category: 'Beverages', servingSize: 240, servingUnit: 'ml (1 cup)', calories: 2, protein: 0.3, fat: 0, vi: 'cà phê đen cà phê' },
   { id: 'soda', name: 'Soda (cola)', category: 'Beverages', servingSize: 355, servingUnit: 'ml (12 oz can)', calories: 140, protein: 0, fat: 0, vi: 'nước ngọt coca cola' },
