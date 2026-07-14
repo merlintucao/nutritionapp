@@ -27,21 +27,21 @@ const FOOD_DB = [
   { id: 'onion', name: 'Onion', category: 'Vegetables', servingSize: 100, servingUnit: 'g', calories: 40, protein: 1.1, fat: 0.1, vi: 'hành tây' },
 
   // --- Meat & Poultry ---
-  { id: 'chicken_breast', name: 'Chicken Breast (cooked)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 165, protein: 31, fat: 3.6, common: true, vi: 'ức gà thịt gà' },
-  { id: 'chicken_thigh', name: 'Chicken Thigh (cooked)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 209, protein: 26, fat: 10.9, common: true, vi: 'đùi gà thịt gà' },
-  { id: 'ground_beef_85', name: 'Ground Beef 85/15 (cooked)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 250, protein: 26, fat: 17, common: true, vi: 'thịt bò xay bò xay' },
-  { id: 'ground_turkey', name: 'Ground Turkey (cooked)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 189, protein: 27, fat: 8, common: true, vi: 'thịt gà tây xay' },
-  { id: 'steak_sirloin', name: 'Sirloin Steak (cooked)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 206, protein: 29, fat: 9, vi: 'thịt bò bít tết bò' },
-  { id: 'pork_chop', name: 'Pork Chop (cooked)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 231, protein: 27, fat: 13, vi: 'sườn heo thịt heo thịt lợn' },
+  { id: 'chicken_breast', name: 'Chicken Breast (raw)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 120, protein: 22.5, fat: 2.6, common: true, vi: 'ức gà thịt gà' },
+  { id: 'chicken_thigh', name: 'Chicken Thigh (raw)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 121, protein: 19.7, fat: 4.1, common: true, vi: 'đùi gà thịt gà' },
+  { id: 'ground_beef_85', name: 'Ground Beef 85/15 (raw)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 215, protein: 18.6, fat: 15, common: true, vi: 'thịt bò xay bò xay' },
+  { id: 'ground_turkey', name: 'Ground Turkey (raw)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 148, protein: 19.7, fat: 7, common: true, vi: 'thịt gà tây xay' },
+  { id: 'steak_sirloin', name: 'Sirloin Steak (raw)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 150, protein: 21.7, fat: 6.6, vi: 'thịt bò bít tết bò' },
+  { id: 'pork_chop', name: 'Pork Chop (raw)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 170, protein: 21, fat: 9.5, vi: 'sườn heo thịt heo thịt lợn' },
   { id: 'bacon', name: 'Bacon', category: 'Meat & Poultry', servingSize: 2, servingUnit: 'slices', calories: 90, protein: 6, fat: 7, common: true, vi: 'thịt xông khói ba rọi' },
   { id: 'turkey_breast_deli', name: 'Turkey Breast (deli)', category: 'Meat & Poultry', servingSize: 100, servingUnit: 'g', calories: 104, protein: 17, fat: 1.7, vi: 'ức gà tây' },
 
   // --- Fish & Seafood ---
-  { id: 'salmon', name: 'Salmon (cooked)', category: 'Fish & Seafood', servingSize: 100, servingUnit: 'g', calories: 208, protein: 20, fat: 13, common: true, vi: 'cá hồi' },
+  { id: 'salmon', name: 'Salmon (raw)', category: 'Fish & Seafood', servingSize: 100, servingUnit: 'g', calories: 208, protein: 20.4, fat: 13.4, common: true, vi: 'cá hồi' },
   { id: 'tuna_canned', name: 'Tuna, canned (in water)', category: 'Fish & Seafood', servingSize: 100, servingUnit: 'g', calories: 116, protein: 26, fat: 0.8, common: true, vi: 'cá ngừ' },
-  { id: 'shrimp', name: 'Shrimp (cooked)', category: 'Fish & Seafood', servingSize: 100, servingUnit: 'g', calories: 99, protein: 24, fat: 0.3, common: true, vi: 'tôm' },
-  { id: 'tilapia', name: 'Tilapia (cooked)', category: 'Fish & Seafood', servingSize: 100, servingUnit: 'g', calories: 128, protein: 26, fat: 2.7, vi: 'cá rô phi' },
-  { id: 'cod', name: 'Cod (cooked)', category: 'Fish & Seafood', servingSize: 100, servingUnit: 'g', calories: 105, protein: 23, fat: 0.9, vi: 'cá tuyết' },
+  { id: 'shrimp', name: 'Shrimp (raw)', category: 'Fish & Seafood', servingSize: 100, servingUnit: 'g', calories: 85, protein: 20, fat: 0.5, common: true, vi: 'tôm' },
+  { id: 'tilapia', name: 'Tilapia (raw)', category: 'Fish & Seafood', servingSize: 100, servingUnit: 'g', calories: 96, protein: 20.1, fat: 1.7, vi: 'cá rô phi' },
+  { id: 'cod', name: 'Cod (raw)', category: 'Fish & Seafood', servingSize: 100, servingUnit: 'g', calories: 82, protein: 17.8, fat: 0.7, vi: 'cá tuyết' },
 
   // --- Dairy & Eggs ---
   { id: 'egg', name: 'Egg, large', category: 'Dairy & Eggs', servingSize: 1, servingUnit: 'egg', calories: 72, protein: 6.3, fat: 4.8, common: true, vi: 'trứng trứng gà' },
