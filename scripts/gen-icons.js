@@ -167,6 +167,15 @@ function resizeCenterCrop(image, size) {
   return out;
 }
 
+// Key the source's near-white background out to transparent, in place, so the
+// header logo blends into the page instead of showing a white box.
+function keyNearWhite(pixels) {
+  for (let i = 0; i < pixels.length; i += 4) {
+    if (pixels[i] > 244 && pixels[i + 1] > 244 && pixels[i + 2] > 244) pixels[i + 3] = 0;
+  }
+  return pixels;
+}
+
 const source = path.join(__dirname, '..', 'dog.png');
 const outDir = path.join(__dirname, '..', 'icons');
 const image = decodePNG(source);
@@ -191,3 +200,8 @@ const favicon = encodeICO([
 const faviconPath = path.join(__dirname, '..', 'favicon.ico');
 fs.writeFileSync(faviconPath, favicon);
 console.log(`wrote favicon.ico (${favicon.length} bytes)`);
+
+// Lightweight, transparent-background header logo (shown ~34px, generated at 96px).
+const logoPng = encodePNG(96, 96, keyNearWhite(resizeCenterCrop(image, 96)));
+fs.writeFileSync(path.join(outDir, 'logo.png'), logoPng);
+console.log(`wrote icons/logo.png (${logoPng.length} bytes)`);
