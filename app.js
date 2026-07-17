@@ -41,6 +41,9 @@ const el = {
 // Inline SVG for the per-item remove ("×") button, matching the design.
 const REMOVE_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
 
+// Quantity multipliers offered per logged item (½ first, then 1–10).
+const QTY_OPTIONS = [0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
 // ---- Helpers ----
 function todayStr() {
   const d = new Date();
@@ -123,14 +126,14 @@ function renderLog() {
     const qtySel = document.createElement('select');
     qtySel.className = 'qty-select';
     qtySel.setAttribute('aria-label', 'Quantity for ' + it.name);
-    for (let n = 1; n <= 10; n++) {
+    QTY_OPTIONS.forEach((n) => {
       const opt = document.createElement('option');
       opt.value = String(n);
-      opt.textContent = String(n);
+      opt.textContent = n === 0.5 ? '½' : String(n);
       if (n === q) opt.selected = true;
       qtySel.appendChild(opt);
-    }
-    qtySel.addEventListener('change', (e) => setQuantity(it.uid, parseInt(e.target.value, 10)));
+    });
+    qtySel.addEventListener('change', (e) => setQuantity(it.uid, parseFloat(e.target.value)));
 
     // Macros as direct grid children so they align into fixed columns.
     const cal = document.createElement('span');
